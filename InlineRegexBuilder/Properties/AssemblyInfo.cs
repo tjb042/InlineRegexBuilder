@@ -7,11 +7,11 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("RegularExpressionBuilder")]
-[assembly: AssemblyDescription("https://inlineregexbuilder.codeplex.com/")]
+[assembly: AssemblyDescription("https://github.com/tjb042/InlineRegexBuilder")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Timothy James")]
 [assembly: AssemblyProduct("RegularExpressionBuilder")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright © 2015 Timothy James")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: System.CLSCompliant(true)]
@@ -34,6 +34,6 @@ using System.Resources;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.3.0")]
+[assembly: AssemblyVersion("1.2.3.18")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
