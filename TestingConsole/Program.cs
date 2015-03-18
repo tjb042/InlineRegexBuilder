@@ -45,7 +45,7 @@ namespace TestingConsole {
                                 .AppendText("::1")
                             ,
                             standard => standard
-                                .LogicalGrouping(group1 => group1
+                                .CaptureGroup(group1 => group1
                                     .MatchCharacterSet("0-9a-fA-F").QuantifierRange(1, 4)
                                 ).QuantifierRange(1, 8)
                         )
@@ -53,7 +53,7 @@ namespace TestingConsole {
                     ,
                     ipv4 => ipv4 // ipv4 in the format of [XXX.XXX.XXX.XXX]
                         .AppendText("[")
-                        .LogicalGrouping(group1 => group1
+                        .CaptureGroup(group1 => group1
                             .MatchCharacterSet("0-9").QuantifierRange(1, 3)
                             .AppendText('.')
                         ).Quantifier(4)
@@ -62,9 +62,9 @@ namespace TestingConsole {
                     domain => domain // standard domain suffix
                         .MatchCharacterSet("a-zA-Z0-9-.").QuantifierMinimum(1) // start with some characters
 
-                        .LogicalGrouping(suffix => suffix
+                        .CaptureGroup(suffix => suffix
                             .AppendText('.') // we need the dot
-                            .LogicalGrouping(tld => tld
+                            .CaptureGroup(tld => tld
                                 .AppendText("[Aa][Ee][Rr][Oo]", false).Or()
                                 .AppendText("[Aa][Ss][Ii][Aa]", false).Or()
                                 .AppendText("[Bb][Ii][Zz]", false).Or()
@@ -125,7 +125,7 @@ namespace TestingConsole {
                 .BeginString() // string must start with this
                     .AnyDecimalDigit().Quantifier(5) // first 5 required digits
 
-                    .LogicalGrouping(group1 => group1 // logical group for optional 4 digits
+                    .CaptureGroup(group1 => group1 // logical group for optional 4 digits
                         .MatchCharacterSet(' ', '-') // required space or hyphen separator
                         .AnyDecimalDigit().Quantifier(4) // last 4 digits
                     ).Optional() // makes logical group optional
