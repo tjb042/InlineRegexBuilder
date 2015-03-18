@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RegularExpressionBuilder;
+using IRE;
 using System.Text.RegularExpressions;
 
 namespace TestingConsole {
@@ -21,8 +21,8 @@ namespace TestingConsole {
             RegexBuilder builderA = new RegexBuilder(true);
             RegexBuilder builderB = new RegexBuilder(true);
 
-            builderA.AddText("BA");
-            builderB.AddText("BB");
+            builderA.AppendText("BA");
+            builderB.AppendText("BB");
 
             builderA += builderB;
         }
@@ -31,70 +31,70 @@ namespace TestingConsole {
             RegexBuilder builder = new RegexBuilder(allowEmptyString: true);
 
             builder
-                .StartOfAString()
+                .BeginString()
 
                 .MatchCharacterSet("a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.").QuantifierRange(2, 64) // at least 2 characters long and a max of 64 from the character set
 
-                .AddText('@') // the @
+                .AppendText('@') // the @
 
                 .Alternation(true, true, // the domain is either ipv4, ipv6, domain, or localhost
                     ipv6 => ipv6 // ipv6 in the format of [IPv6:{code}]
-                        .AddText(@"\[[Ii][Pp][Vv]6:", false) // the beginning [IPv6:
+                        .AppendText(@"\[[Ii][Pp][Vv]6:", false) // the beginning [IPv6:
                         .Alternation(
                             loopback => loopback
-                                .AddText("::1")
+                                .AppendText("::1")
                             ,
                             standard => standard
                                 .LogicalGrouping(group1 => group1
                                     .MatchCharacterSet("0-9a-fA-F").QuantifierRange(1, 4)
                                 ).QuantifierRange(1, 8)
                         )
-                        .AddText("]")
+                        .AppendText("]")
                     ,
                     ipv4 => ipv4 // ipv4 in the format of [XXX.XXX.XXX.XXX]
-                        .AddText("[")
+                        .AppendText("[")
                         .LogicalGrouping(group1 => group1
                             .MatchCharacterSet("0-9").QuantifierRange(1, 3)
-                            .AddText('.')
+                            .AppendText('.')
                         ).Quantifier(4)
-                        .AddText("]")
+                        .AppendText("]")
                     ,
                     domain => domain // standard domain suffix
                         .MatchCharacterSet("a-zA-Z0-9-.").QuantifierMinimum(1) // start with some characters
 
                         .LogicalGrouping(suffix => suffix
-                            .AddText('.') // we need the dot
+                            .AppendText('.') // we need the dot
                             .LogicalGrouping(tld => tld
-                                .AddText("[Aa][Ee][Rr][Oo]", false).Or()
-                                .AddText("[Aa][Ss][Ii][Aa]", false).Or()
-                                .AddText("[Bb][Ii][Zz]", false).Or()
-                                .AddText("[Cc][Aa][Tt]", false).Or()
-                                .AddText("[Cc][Oo][Oo][Pp]", false).Or()
-                                .AddText("[Cc][Oo][Mm]", false).Or()
-                                .AddText("[Ii][Nn][Ff][Oo]", false).Or()
-                                .AddText("[Ii][Nn][Tt]", false).Or()
-                                .AddText("[Jj][Oo][Bb][Ss]", false).Or()
-                                .AddText("[Mm][Oo][Bb][Ii]", false).Or()
-                                .AddText("[Mm][Uu][Ss][Ee][Uu][Mm]", false).Or()
-                                .AddText("[Nn][Aa][Mm][Ee]", false).Or()
-                                .AddText("[Nn][Ee][Tt]", false).Or()
-                                .AddText("[Oo][Rr][Gg]", false).Or()
-                                .AddText("[Pp][Oo][Ss][Tt]", false).Or()
-                                .AddText("[Pp][Rr][Oo]", false).Or()
-                                .AddText("[Tt][Ee][Ll]", false).Or()
-                                .AddText("[Tt][Rr][Aa][Vv][Ee][Ll]", false).Or()
-                                .AddText("[Xx]{3}", false).Or()
-                                .AddText("[Ee][Dd][Uu]", false).Or()
-                                .AddText("[Gg][Oo][Vv]", false).Or()
-                                .AddText("[Mm][Ii][Ll]", false).Or()
+                                .AppendText("[Aa][Ee][Rr][Oo]", false).Or()
+                                .AppendText("[Aa][Ss][Ii][Aa]", false).Or()
+                                .AppendText("[Bb][Ii][Zz]", false).Or()
+                                .AppendText("[Cc][Aa][Tt]", false).Or()
+                                .AppendText("[Cc][Oo][Oo][Pp]", false).Or()
+                                .AppendText("[Cc][Oo][Mm]", false).Or()
+                                .AppendText("[Ii][Nn][Ff][Oo]", false).Or()
+                                .AppendText("[Ii][Nn][Tt]", false).Or()
+                                .AppendText("[Jj][Oo][Bb][Ss]", false).Or()
+                                .AppendText("[Mm][Oo][Bb][Ii]", false).Or()
+                                .AppendText("[Mm][Uu][Ss][Ee][Uu][Mm]", false).Or()
+                                .AppendText("[Nn][Aa][Mm][Ee]", false).Or()
+                                .AppendText("[Nn][Ee][Tt]", false).Or()
+                                .AppendText("[Oo][Rr][Gg]", false).Or()
+                                .AppendText("[Pp][Oo][Ss][Tt]", false).Or()
+                                .AppendText("[Pp][Rr][Oo]", false).Or()
+                                .AppendText("[Tt][Ee][Ll]", false).Or()
+                                .AppendText("[Tt][Rr][Aa][Vv][Ee][Ll]", false).Or()
+                                .AppendText("[Xx]{3}", false).Or()
+                                .AppendText("[Ee][Dd][Uu]", false).Or()
+                                .AppendText("[Gg][Oo][Vv]", false).Or()
+                                .AppendText("[Mm][Ii][Ll]", false).Or()
                             )
                         ).OptionallyAnyQuantity()
                     , 
                     local => local // always accept localhost!
-                        .AddText("[Ll][Oo][Cc][Aa][Ll][Hh][Oo][Ss][Tt]", false)
+                        .AppendText("[Ll][Oo][Cc][Aa][Ll][Hh][Oo][Ss][Tt]", false)
                 )
 
-                .EndOfAString();
+                .EndString();
 
             Regex regex = builder.CreateRegex();
 
@@ -122,7 +122,7 @@ namespace TestingConsole {
 
             // U.S. Zip Code regex for 5 and 9 digit zip codes (with a space or hyphen separator if it's 9 digits)
             builder
-                .StartOfAString() // string must start with this
+                .BeginString() // string must start with this
                     .AnyDecimalDigit().Quantifier(5) // first 5 required digits
 
                     .LogicalGrouping(group1 => group1 // logical group for optional 4 digits
@@ -130,7 +130,7 @@ namespace TestingConsole {
                         .AnyDecimalDigit().Quantifier(4) // last 4 digits
                     ).Optional() // makes logical group optional
 
-                .EndOfAString(); // string must end with this
+                .EndString(); // string must end with this
 
             Regex regex = builder.CreateRegex();
 
