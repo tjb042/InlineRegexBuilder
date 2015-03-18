@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace IRE {
 
-    public sealed class RegexBuilder {
+    public sealed partial class RegexBuilder {
 
         #region Constants
 
