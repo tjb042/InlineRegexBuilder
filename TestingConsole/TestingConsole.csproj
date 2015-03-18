@@ -43,12 +43,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RegularExpressionBuilder\RegularExpressionBuilder.csproj">
-      <Project>{476EB608-D373-45A9-91AB-441257FFDC0C}</Project>
-      <Name>RegularExpressionBuilder</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

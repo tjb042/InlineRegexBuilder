@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace RegularExpressionBuilder {
+namespace IRE {
 
     public sealed class RegexBuilder {
 
@@ -70,13 +70,13 @@ namespace RegularExpressionBuilder {
 
         #region Metacharacters
 
-        public RegexBuilder StartOfAString() {
+        public RegexBuilder BeginString() {
             regexString.Append('^');
 
             return this;
         }
 
-        public RegexBuilder EndOfAString() {
+        public RegexBuilder EndString() {
             regexString.Append('$');
 
             return this;

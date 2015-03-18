@@ -1,9 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingConsole", "TestingConsole\TestingConsole.csproj", "{B8C4C4F5-7285-4A0B-A36D-D9837153FCD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegularExpressionBuilder", "RegularExpressionBuilder\RegularExpressionBuilder.csproj", "{476EB608-D373-45A9-91AB-441257FFDC0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InlineRegexBuilder", "InlineRegexBuilder\InlineRegexBuilder.csproj", "{476EB608-D373-45A9-91AB-441257FFDC0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
