@@ -70,19 +70,33 @@ namespace IRE {
 
         #region Metacharacters
 
+        /// <summary>
+        /// Inserts the caret symbol which represents the start of a string
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder BeginString() {
             regexString.Append('^');
-
+            
             return this;
         }
 
+        /// <summary>
+        /// Inserts the dollar-sign symbol which reprsents the end of a string
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder EndString() {
             regexString.Append('$');
 
             return this;
         }
 
-        public RegexBuilder AddText(string input, bool encode = true) {
+        /// <summary>
+        /// Appends text into the builder
+        /// </summary>
+        /// <param name="input">The text to append</param>
+        /// <param name="encode"><c>True</c>, to encode <paramref name="input"/>; <c>False</c> to append text as-is</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder AppendText(string input, bool encode = true) {
             if (string.IsNullOrEmpty(input)) {
                 return this;
             }
@@ -92,23 +106,38 @@ namespace IRE {
             return this;
         }
 
-        public RegexBuilder AddText(char input, bool encode = true) {
-            return AddText(input.ToString(), encode);
+        /// <summary>
+        /// Appends text into the builder
+        /// </summary>
+        /// <param name="input">The character to append</param>
+        /// <param name="encode"><c>True</c>, to encode <paramref name="input"/>; <c>False</c> to append the character as-is</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder AppendText(char input, bool encode = true) {
+            return AppendText(input.ToString(), encode);
         }
 
+        /// <summary>
+        /// Inserts the pipe symbol which represents a logical OR
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder Or() {
             this.regexString.Append('|');
 
             return this;
         }
 
-        public RegexBuilder Alternation(params Action<RegexBuilder>[] options) {
-            if (options == null || options.Length == 0) {
+        /// <summary>
+        /// Appends a list of subclauses into the current builder, with each clause appended with a logical OR
+        /// </summary>
+        /// <param name="clauses">The subclauses to append</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder Alternation(params Action<RegexBuilder>[] clauses) {
+            if (clauses == null || clauses.Length == 0) {
                 return this;
             }
 
             bool isFirst = true;
-            foreach (var option in options) {
+            foreach (var option in clauses) {
                 if (isFirst) {
                     isFirst = false;
                 }
@@ -122,8 +151,15 @@ namespace IRE {
             return this;
         }
 
-        public RegexBuilder Alternation(bool isCaptureGroup = true, bool makeEachAlternateALogicalGrouping = false, params Action<RegexBuilder>[] options) {
-            if (options == null || options.Length == 0) {
+        /// <summary>
+        /// Appends a list of subclauses into the current builder, with each clause appended with a logical OR
+        /// </summary>
+        /// <param name="isCaptureGroup">Indicates if the array of clauses should be wrapped in a capture group</param>
+        /// <param name="makeEachAlternateALogicalGrouping">Indicates if each clause within the array should be its own capture group</param>
+        /// <param name="clauses">The subclauses to append</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder Alternation(bool isCaptureGroup = true, bool makeEachAlternateALogicalGrouping = false, params Action<RegexBuilder>[] clauses) {
+            if (clauses == null || clauses.Length == 0) {
                 return this;
             }
 
@@ -132,7 +168,7 @@ namespace IRE {
             }
 
             bool isFirst = true;
-            foreach (var option in options) {
+            foreach (var option in clauses) {
                 if (isFirst) {
                     isFirst = false;
                 }
@@ -155,9 +191,15 @@ namespace IRE {
             return this;
         }
 
+        /// <summary>
+        /// Appends an explicit quantifier to the previous expression
+        /// </summary>
+        /// <param name="quantity">The explicit quantity to require for the previous expression</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when <paramref name="quantity"/> is less than one.</exception>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder Quantifier(int quantity) {
             if (quantity < 1) {
-                throw new InvalidOperationException("quantity cannot be less than one.");
+                throw new ArgumentOutOfRangeException("quantity", "quantity cannot be less than one.");
             }
 
             regexString.Append('{');
@@ -167,6 +209,13 @@ namespace IRE {
             return this;
         }
 
+        /// <summary>
+        /// Appends an explicit quantifier range to the previous expression
+        /// </summary>
+        /// <param name="minimumOccurrences">The minimum allowed number of occurrences of the previous expression</param>
+        /// <param name="maximumOccurrences">The maximum allowed number of occurrences of the previous expression</param>
+        /// <param name="lazyEvaluation">Indicates if the Regex interpreter should use lazy evaluation</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder QuantifierRange(int minimumOccurrences, int maximumOccurrences, bool lazyEvaluation = false) {
             if (minimumOccurrences < 0) {
                 throw new InvalidOperationException("minimumOccurrences cannot be less than zero");
@@ -191,6 +240,12 @@ namespace IRE {
             return this;
         }
 
+        /// <summary>
+        /// Appends an explicit minimum quantifier to the previous expression
+        /// </summary>
+        /// <param name="minimumOccurrences">The minimum allowed number of occurrences of the previous expression</param>
+        /// <param name="lazyEvaluation">Indicates if the Regex interpreter should use lazy evaluation</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder QuantifierMinimum(int minimumOccurrences, bool lazyEvaluation = false) {
             if (minimumOccurrences < 0) {
                 throw new InvalidOperationException("minimumOccurrences cannot be less than zero");
@@ -207,6 +262,12 @@ namespace IRE {
             return this;
         }
 
+        /// <summary>
+        /// Appends an explicit set of characters to match
+        /// </summary>
+        /// <param name="characters">The character set to append</param>
+        /// <param name="encode"><c>True</c>, to encode <paramref name="characters"/>; <c>False</c> to append the character set as-is</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder MatchCharacterSet(string characters, bool encode = true) {
             if (string.IsNullOrEmpty(characters)) {
                 return this;
@@ -219,6 +280,11 @@ namespace IRE {
             return this;
         }
 
+        /// <summary>
+        /// Appends an explicit set of characters to match
+        /// </summary>
+        /// <param name="characters">The character set to append</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder MatchCharacterSet(params char[] characters) {
             if (characters == null || characters.Length == 0) {
                 return this;
@@ -227,6 +293,12 @@ namespace IRE {
             return MatchCharacterSet(new string(characters));
         }
 
+        /// <summary>
+        /// Appends an explicit set of characters that should not match
+        /// </summary>
+        /// <param name="characters">The character set to append</param>
+        /// <param name="encode"><c>True</c>, to encode <paramref name="characters"/>; <c>False</c> to append the character set as-is</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder NonMatchCharacterSet(string characters, bool encode = true) {
             if (string.IsNullOrEmpty(characters)) {
                 return this;
@@ -240,6 +312,11 @@ namespace IRE {
             return this;
         }
 
+        /// <summary>
+        /// Appends an explicit set of characters that should not match
+        /// </summary>
+        /// <param name="characters">The character set to append</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder NonMatchCharacterSet(params char[] characters) {
             if (characters == null || characters.Length == 0) {
                 return this;
@@ -605,7 +682,7 @@ namespace IRE {
         /// </returns>
         public static explicit operator RegexBuilder(Regex regex) {
             RegexBuilder builder = new RegexBuilder(false);
-            builder.AddText(regex.ToString(), false);
+            builder.AppendText(regex.ToString(), false);
             return builder;
         }
 
@@ -633,7 +710,7 @@ namespace IRE {
                 return builder;
             }
 
-            builder.AddText(regex, false);
+            builder.AppendText(regex, false);
             if (!builder.IsValid()) {
                 throw new InvalidOperationException("The supplied input 'regex' was not a valid regular expression.");
             }
