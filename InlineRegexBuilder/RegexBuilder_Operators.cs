@@ -16,6 +16,10 @@ namespace IRE {
         /// The result of the conversion.
         /// </returns>
         public static explicit operator Regex(RegexBuilder builder) {
+            if (builder == null) {
+                throw new ArgumentNullException("builder");
+            }
+
             return builder.CreateRegex();
         }
 
@@ -27,8 +31,13 @@ namespace IRE {
         /// The result of the conversion.
         /// </returns>
         public static explicit operator RegexBuilder(Regex regex) {
+            if (regex == null) {
+                throw new ArgumentNullException("regex");
+            }
+
             RegexBuilder builder = new RegexBuilder(false);
             builder.AppendText(regex.ToString(), false);
+
             return builder;
         }
 
@@ -40,6 +49,10 @@ namespace IRE {
         /// The result of the conversion.
         /// </returns>
         public static explicit operator string(RegexBuilder builder) {
+            if (builder == null) {
+                throw new ArgumentNullException("builder");
+            }
+
             return builder.ToString();
         }
 
@@ -73,12 +86,36 @@ namespace IRE {
         /// The result of the operation.
         /// </returns>
         public static RegexBuilder operator +(RegexBuilder builderA, RegexBuilder builderB) {
+            return Add(builderA, builderB);
+        }
+
+        /// <summary>
+        /// Appends two builders together.
+        /// </summary>
+        /// <param name="builderA">The 'operator' builder.</param>
+        /// <param name="builderB">The 'operand' builder.</param>
+        /// <returns>
+        /// The result of the operation.
+        /// </returns>
+        public static RegexBuilder Add(RegexBuilder builderA, RegexBuilder builderB) {
             // if A allows emptys it doesn't have its closing tag, so don't worry
             // if B allows emptys it doesn't have a closing tag and we want to ignore the first (^$)|( characters
+            if (builderA == null) {
+                throw new ArgumentNullException("builderA");
+            }
+            if (builderB == null) {
+                throw new ArgumentNullException("builderB");
+            }
 
             builderA.regexString.Append(builderB.regexString.ToString().Substring(builderB.AllowsEmptyString ? 6 : 0));
 
             return builderA;
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "builderB")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "builderA")]
+        public static RegexBuilder operator -(RegexBuilder builderA, RegexBuilder builderB) {
+            throw new NotSupportedException();
         }
 
     }

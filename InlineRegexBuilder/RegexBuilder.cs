@@ -78,12 +78,21 @@ namespace IRE {
         }
 
         /// <summary>
+        /// Appends text into the builder. Regex encodes <paramref name="input"/>.
+        /// </summary>
+        /// <param name="input">The text to append</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder AppendText(string input) {
+            return AppendText(input, true);
+        }
+
+        /// <summary>
         /// Appends text into the builder
         /// </summary>
         /// <param name="input">The text to append</param>
         /// <param name="encode"><c>True</c>, to encode <paramref name="input"/>; <c>False</c> to append text as-is</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder AppendText(string input, bool encode = true) {
+        public RegexBuilder AppendText(string input, bool encode) {
             if (string.IsNullOrEmpty(input)) {
                 return this;
             }
@@ -94,12 +103,21 @@ namespace IRE {
         }
 
         /// <summary>
+        /// Appends text into the builder. Regex encodes <paramref name="input"/>.
+        /// </summary>
+        /// <param name="input">The character to append</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder AppendText(char input) {
+            return AppendText(input, true);
+        }
+
+        /// <summary>
         /// Appends text into the builder
         /// </summary>
         /// <param name="input">The character to append</param>
         /// <param name="encode"><c>True</c>, to encode <paramref name="input"/>; <c>False</c> to append the character as-is</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder AppendText(char input, bool encode = true) {
+        public RegexBuilder AppendText(char input, bool encode) {
             return AppendText(input.ToString(), encode);
         }
 
@@ -197,21 +215,31 @@ namespace IRE {
         }
 
         /// <summary>
+        /// Appends an explicit quantifier range to the previous expression. Does not use lazy evaluation.
+        /// </summary>
+        /// <param name="minimumOccurrences">The minimum allowed number of occurrences of the previous expression</param>
+        /// <param name="maximumOccurrences">The maximum allowed number of occurrences of the previous expression</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder QuantifierRange(int minimumOccurrences, int maximumOccurrences) {
+            return QuantifierRange(minimumOccurrences, maximumOccurrences, false);
+        }
+
+        /// <summary>
         /// Appends an explicit quantifier range to the previous expression
         /// </summary>
         /// <param name="minimumOccurrences">The minimum allowed number of occurrences of the previous expression</param>
         /// <param name="maximumOccurrences">The maximum allowed number of occurrences of the previous expression</param>
         /// <param name="lazyEvaluation">Indicates if the Regex interpreter should use lazy evaluation</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder QuantifierRange(int minimumOccurrences, int maximumOccurrences, bool lazyEvaluation = false) {
+        public RegexBuilder QuantifierRange(int minimumOccurrences, int maximumOccurrences, bool lazyEvaluation) {
             if (minimumOccurrences < 0) {
-                throw new InvalidOperationException("minimumOccurrences cannot be less than zero");
+                throw new ArgumentOutOfRangeException("minimumOccurrences");
             }
             else if (maximumOccurrences < 0) {
-                throw new InvalidOperationException("maximumOccurrences cannot be less than zero");
+                throw new ArgumentOutOfRangeException("maximumOccurrences");
             }
             else if (maximumOccurrences <= minimumOccurrences) {
-                throw new InvalidOperationException("maximumOccurrences cannot be less than or equal to minimumOccurrences. If they're equal use ExplicitQuantifierOfPreviousExpression.");
+                throw new ArgumentOutOfRangeException("maximumOccurrences");
             }
 
             regexString.Append('{');
@@ -235,7 +263,7 @@ namespace IRE {
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder QuantifierMinimum(int minimumOccurrences, bool lazyEvaluation = false) {
             if (minimumOccurrences < 0) {
-                throw new InvalidOperationException("minimumOccurrences cannot be less than zero");
+                throw new ArgumentOutOfRangeException("minimumOccurrences");
             }
 
             regexString.Append('{');
@@ -340,11 +368,19 @@ namespace IRE {
         }
 
         /// <summary>
+        /// Allows zero or more of the previous expression. Does not use lazy evaluation.
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder OptionallyAnyQuantity() {
+            return OptionallyAnyQuantity(false);
+        }
+
+        /// <summary>
         /// Allows zero or more of the previous expression.
         /// </summary>
         /// <param name="lazyEvaluation">if <c>true</c> forces this expression to use lazy evaluation.</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder OptionallyAnyQuantity(bool lazyEvaluation = false) {
+        public RegexBuilder OptionallyAnyQuantity(bool lazyEvaluation) {
             regexString.Append('*');
 
             if (lazyEvaluation) {
@@ -355,11 +391,19 @@ namespace IRE {
         }
 
         /// <summary>
+        /// Allows one or more of the previous expression. Does not use lazy evaluation.
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder AtLeastOne() {
+            return AtLeastOne(false);
+        }
+
+        /// <summary>
         /// Allows one or more of the previous expression.
         /// </summary>
         /// <param name="lazyEvaluation">if <c>true</c> forces this expression to use lazy evaluation.</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder AtLeastOne(bool lazyEvaluation = false) {
+        public RegexBuilder AtLeastOne(bool lazyEvaluation) {
             regexString.Append('+');
 
             if (lazyEvaluation) {
@@ -370,11 +414,19 @@ namespace IRE {
         }
 
         /// <summary>
+        /// Allows zero or one of the previous expression. Does not use lazy evaluation.
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder Optional() {
+            return Optional(false);
+        }
+
+        /// <summary>
         /// Allows zero or one of the previous expression.
         /// </summary>
         /// <param name="lazyEvaluation">if <c>true</c> forces this expression to use lazy evaluation.</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder Optional(bool lazyEvaluation = false) {
+        public RegexBuilder Optional(bool lazyEvaluation) {
             regexString.Append('?');
 
             if (lazyEvaluation) {
