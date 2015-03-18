@@ -177,7 +177,7 @@ namespace IRE {
                 }
 
                 if (makeEachAlternateALogicalGrouping) {
-                    LogicalGrouping(option);
+                    CaptureGroup(option);
                 }
                 else {
                     option.Invoke(this);
@@ -325,8 +325,15 @@ namespace IRE {
             return NonMatchCharacterSet(new string(characters));
         }
 
-        public RegexBuilder LogicalGrouping(Action<RegexBuilder> action, bool nonCapturing = false, bool optionalGrouping = false) {
-            if (action == null) {
+        /// <summary>
+        /// Appends a capture group that contains <paramref name="clause"/>
+        /// </summary>
+        /// <param name="clause">The clause to append</param>
+        /// <param name="nonCapturing">If <c>True</c>, indicates that the group should not capture its contents; otherwise, <c>False</c></param>
+        /// <param name="isOptionalGroup">If <c>True</c>, group is optional; otherwise, <c>False</c></param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder CaptureGroup(Action<RegexBuilder> clause, bool nonCapturing = false, bool isOptionalGroup = false) {
+            if (clause == null) {
                 return this;
             }
 
@@ -335,22 +342,12 @@ namespace IRE {
                 regexString.Append("?:");
             }
 
-            action.Invoke(this);
+            clause.Invoke(this);
             regexString.Append(')');
 
-            if (optionalGrouping) {
+            if (isOptionalGroup) {
                 regexString.Append('?');
             }
-
-            return this;
-        }
-
-        public RegexBuilder BackReference(int numberOfAllowedBackReferences) {
-            if (numberOfAllowedBackReferences < 1 || numberOfAllowedBackReferences > 9) {
-                throw new InvalidOperationException("numberOfAllowedBackReferences must be between 1 and 9.");
-            }
-
-            regexString.Append("\\" + numberOfAllowedBackReferences);
 
             return this;
         }
@@ -359,6 +356,7 @@ namespace IRE {
         /// Allows zero or more of the previous expression.
         /// </summary>
         /// <param name="lazyEvaluation">if <c>true</c> forces this expression to use lazy evaluation.</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder OptionallyAnyQuantity(bool lazyEvaluation = false) {
             regexString.Append('*');
 
@@ -373,6 +371,7 @@ namespace IRE {
         /// Allows one or more of the previous expression.
         /// </summary>
         /// <param name="lazyEvaluation">if <c>true</c> forces this expression to use lazy evaluation.</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AtLeastOne(bool lazyEvaluation = false) {
             regexString.Append('+');
 
@@ -387,6 +386,7 @@ namespace IRE {
         /// Allows zero or one of the previous expression.
         /// </summary>
         /// <param name="lazyEvaluation">if <c>true</c> forces this expression to use lazy evaluation.</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder Optional(bool lazyEvaluation = false) {
             regexString.Append('?');
 
@@ -401,6 +401,7 @@ namespace IRE {
         /// Inserts an inline comment into the expression
         /// </summary>
         /// <param name="comment">The comment to insert into the expression.</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AddComment(string comment) {
             if (string.IsNullOrEmpty(comment)) {
                 return this;
@@ -487,54 +488,90 @@ namespace IRE {
             return this;
         }
 
+        /// <summary>
+        /// Appends \w, which matches any word character
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AnyWordCharacter() {
             regexString.Append(@"\w");
 
             return this;
         }
 
+        /// <summary>
+        /// Appends \W, which matches any non-word character
+        /// </summary>
+        /// <returns></returns>
         public RegexBuilder AnyNonWordCharacter() {
             regexString.Append(@"\W");
 
             return this;
         }
 
+        /// <summary>
+        /// Appends \s, which matches any whitespace character
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AnyWhiteSpaceCharacter() {
             regexString.Append(@"\s");
 
             return this;
         }
 
+        /// <summary>
+        /// Appends \S, which matches any nonwhitespace character
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AnyNonWhiteSpaceCharacter() {
             regexString.Append(@"\S");
 
             return this;
         }
 
+        /// <summary>
+        /// Appends \d, which matches any decimal digit
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AnyDecimalDigit() {
             regexString.Append(@"\d");
 
             return this;
         }
 
+        /// <summary>
+        /// Appends \D, which matches any nondigit
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AnyNonDigit() {
             regexString.Append(@"\D");
 
             return this;
         }
 
+        /// <summary>
+        /// Appends \b, which matches any word boundary
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AnyWordBoundary() {
             regexString.Append(@"\b");
 
             return this;
         }
 
+        /// <summary>
+        /// Appends \B, which matches any nonword boundary
+        /// </summary>
+        /// <returns></returns>
         public RegexBuilder AnyNonWordBoundary() {
             regexString.Append(@"\B");
 
             return this;
         }
 
+        /// <summary>
+        /// Appends ., which matches any character
+        /// </summary>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AnyCharacter() {
             regexString.Append('.');
 
