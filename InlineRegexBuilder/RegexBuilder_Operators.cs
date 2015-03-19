@@ -112,10 +112,27 @@ namespace IRE {
             return builderA;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2225:OperatorOverloadsHaveNamedAlternates")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "builderB")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "builderA")]
         public static RegexBuilder operator -(RegexBuilder builderA, RegexBuilder builderB) {
             throw new NotSupportedException();
+        }
+
+        public static bool operator ==(RegexBuilder builderA, RegexBuilder builderB) {
+            if (builderA == null) {
+                if (builderB == null) {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return builderA.Equals(builderB);
+        }
+
+        public static bool operator !=(RegexBuilder builderA, RegexBuilder builderB) {
+            return !(builderA == builderB);
         }
 
     }
