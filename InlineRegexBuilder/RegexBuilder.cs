@@ -256,12 +256,21 @@ namespace IRE {
         }
 
         /// <summary>
+        /// Appends an explicit minimum quantifier to the previous expression. Does not use lazy evaluation.
+        /// </summary>
+        /// <param name="minimumOccurrences">The minimum allowed number of occurrences of the previous expression</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder QuantifierMinimum(int minimumOccurrences) {
+            return QuantifierMinimum(minimumOccurrences, false);
+        }
+
+        /// <summary>
         /// Appends an explicit minimum quantifier to the previous expression
         /// </summary>
         /// <param name="minimumOccurrences">The minimum allowed number of occurrences of the previous expression</param>
         /// <param name="lazyEvaluation">Indicates if the Regex interpreter should use lazy evaluation</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder QuantifierMinimum(int minimumOccurrences, bool lazyEvaluation = false) {
+        public RegexBuilder QuantifierMinimum(int minimumOccurrences, bool lazyEvaluation) {
             if (minimumOccurrences < 0) {
                 throw new ArgumentOutOfRangeException("minimumOccurrences");
             }
@@ -278,12 +287,21 @@ namespace IRE {
         }
 
         /// <summary>
+        /// Appends an explicit set of characters to match. Encodes <paramref name="characters"/>.
+        /// </summary>
+        /// <param name="characters">The character set to append</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder MatchCharacterSet(string characters) {
+            return MatchCharacterSet(characters, true);
+        }
+
+        /// <summary>
         /// Appends an explicit set of characters to match
         /// </summary>
         /// <param name="characters">The character set to append</param>
         /// <param name="encode"><c>True</c>, to encode <paramref name="characters"/>; <c>False</c> to append the character set as-is</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder MatchCharacterSet(string characters, bool encode = true) {
+        public RegexBuilder MatchCharacterSet(string characters, bool encode) {
             if (string.IsNullOrEmpty(characters)) {
                 return this;
             }
@@ -309,12 +327,21 @@ namespace IRE {
         }
 
         /// <summary>
+        /// Appends an explicit set of characters that should not match. Encodes <paramref name="characters"/>
+        /// </summary>
+        /// <param name="characters">The character set to append</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder NonMatchCharacterSet(string characters) {
+            return NonMatchCharacterSet(characters, true);
+        }
+
+        /// <summary>
         /// Appends an explicit set of characters that should not match
         /// </summary>
         /// <param name="characters">The character set to append</param>
         /// <param name="encode"><c>True</c>, to encode <paramref name="characters"/>; <c>False</c> to append the character set as-is</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder NonMatchCharacterSet(string characters, bool encode = true) {
+        public RegexBuilder NonMatchCharacterSet(string characters, bool encode) {
             if (string.IsNullOrEmpty(characters)) {
                 return this;
             }
@@ -344,10 +371,29 @@ namespace IRE {
         /// Appends a capture group that contains <paramref name="clause"/>
         /// </summary>
         /// <param name="clause">The clause to append</param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder CaptureGroup(Action<RegexBuilder> clause) {
+            return CaptureGroup(clause, false, false);
+        }
+
+        /// <summary>
+        /// Appends a capture group that contains <paramref name="clause"/>
+        /// </summary>
+        /// <param name="clause">The clause to append</param>
+        /// <param name="nonCapturing">If <c>True</c>, indicates that the group should not capture its contents; otherwise, <c>False</c></param>
+        /// <returns>The current <c>RegexBuilder</c> instance</returns>
+        public RegexBuilder CaptureGroup(Action<RegexBuilder> clause, bool nonCapturing) {
+            return CaptureGroup(clause, nonCapturing, false);
+        }
+
+        /// <summary>
+        /// Appends a capture group that contains <paramref name="clause"/>
+        /// </summary>
+        /// <param name="clause">The clause to append</param>
         /// <param name="nonCapturing">If <c>True</c>, indicates that the group should not capture its contents; otherwise, <c>False</c></param>
         /// <param name="isOptionalGroup">If <c>True</c>, group is optional; otherwise, <c>False</c></param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder CaptureGroup(Action<RegexBuilder> clause, bool nonCapturing = false, bool isOptionalGroup = false) {
+        public RegexBuilder CaptureGroup(Action<RegexBuilder> clause, bool nonCapturing, bool isOptionalGroup) {
             if (clause == null) {
                 return this;
             }
@@ -625,11 +671,12 @@ namespace IRE {
         /// Determines if the current builder represents a valid Regex.
         /// </summary>
         /// <returns><c>true</c> if the Regex is valid; otherwise, <c>false</c>.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Text.RegularExpressions.Regex")]
         public bool IsValid() {
             try {
                 new Regex(regexString.ToString() + (allowEmptyString ? ")" : string.Empty));
             }
-            catch (Exception) {
+            catch (ArgumentException) {
                 return false;
             }
 
@@ -641,11 +688,12 @@ namespace IRE {
         /// </summary>
         /// <param name="options">The options to use when creating the Regex.</param>
         /// <returns><c>true</c> if the Regex is valid; otherwise, <c>false</c>.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Text.RegularExpressions.Regex")]
         public bool IsValid(RegexOptions options) {
             try {
                 new Regex(regexString.ToString() + (allowEmptyString ? ")" : string.Empty), options);
             }
-            catch (Exception) {
+            catch (ArgumentException) {
                 return false;
             }
 
