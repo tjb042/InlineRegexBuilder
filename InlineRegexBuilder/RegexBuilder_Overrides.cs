@@ -15,7 +15,7 @@ namespace IRE {
         ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj) {
-            if (obj == null || obj.GetType() != typeof(RegexBuilder)) {
+            if (obj == null) {
                 return false;
             }
 
