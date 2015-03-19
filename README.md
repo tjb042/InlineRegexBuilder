@@ -11,7 +11,7 @@ If you're looking to get started with Inline Regex Builder - check out the [gett
 
 If you're looking to get started with Regular Expressions - check out [Regular Expressions Quick Start](http://www.regular-expressions.info/quickstart.html)
 
-If you just need a cheat sheet - check out [RegexLib](http://regexlib.com/)
+If you just need a cheat sheet - check out [RegexLib](http://regexlib.com/CheatSheet.aspx)
 
 ## Where can I get it?
 Oh, I'm working on this. There's an old NuGet package for it but it's way out of date. I'll give a shout once it's updated.
