@@ -50,7 +50,6 @@
     <Compile Include="RegexBuilder_Operators.cs" />
     <Compile Include="RegexBuilder_Overrides.cs" />
     <Compile Include="RegexBuilder_StaticMethods.cs" />
-    <Compile Include="RegexMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="IRBKey.snk" />
