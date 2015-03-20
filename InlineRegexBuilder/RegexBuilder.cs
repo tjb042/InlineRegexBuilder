@@ -16,11 +16,6 @@ namespace IRE {
         private StringBuilder regexString = new StringBuilder();
 
         /// <summary>
-        /// Specifies whether this regex supports itself and an empty string, or just itself.
-        /// </summary>
-        private bool allowEmptyString = false;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="RegexBuilder"/> class.
         /// </summary>
         public RegexBuilder() {
@@ -33,8 +28,7 @@ namespace IRE {
         /// <param name="allowEmptyString">if set to <c>true</c> [allow empty string].</param>
         public RegexBuilder(bool allowEmptyString) {
             if (allowEmptyString) {
-                this.allowEmptyString = allowEmptyString;
-                regexString.Append("(^$)|(");
+                this.AllowsEmptyString = allowEmptyString;
             }
         }
 
@@ -49,9 +43,8 @@ namespace IRE {
         ///   <c>true</c> if [allows empty string]; otherwise, <c>false</c>.
         /// </value>
         public bool AllowsEmptyString {
-            get {
-                return this.allowEmptyString;
-            }
+            get;
+            set;
         }
 
         #endregion
@@ -660,7 +653,7 @@ namespace IRE {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Text.RegularExpressions.Regex")]
         public bool IsValid() {
             try {
-                new Regex(regexString.ToString() + (allowEmptyString ? ")" : string.Empty));
+                new Regex(this.ToString());
             }
             catch (ArgumentException) {
                 return false;
@@ -677,7 +670,7 @@ namespace IRE {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Text.RegularExpressions.Regex")]
         public bool IsValid(RegexOptions options) {
             try {
-                new Regex(regexString.ToString() + (allowEmptyString ? ")" : string.Empty), options);
+                new Regex(this.ToString(), options);
             }
             catch (ArgumentException) {
                 return false;
@@ -691,7 +684,7 @@ namespace IRE {
         /// </summary>
         /// <returns>A Regex that is equivalent to this builder.</returns>
         public Regex CreateRegex() {
-            return new Regex(regexString.ToString() + (allowEmptyString ? ")" : string.Empty));
+            return new Regex(this.ToString());
         }
 
         /// <summary>
@@ -700,7 +693,7 @@ namespace IRE {
         /// <param name="options">The options to use when creating the Regex.</param>
         /// <returns>A Regex that is equivalent to this builder.</returns>
         public Regex CreateRegex(RegexOptions options) {
-            return new Regex(regexString.ToString() + (allowEmptyString ? ")" : string.Empty), options);
+            return new Regex(this.ToString(), options);
         }
 
         /// <summary>

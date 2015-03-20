@@ -54,8 +54,8 @@ namespace IRE {
         /// A <see cref="System.String"/> that represents this instance.
         /// </returns>
         public override string ToString() {
-            if (allowEmptyString) {
-                return regexString.ToString() + ')';
+            if (AllowsEmptyString) {
+                return string.Concat("(?:^$)|(?:", regexString.ToString(), ")");
             }
 
             return regexString.ToString();
