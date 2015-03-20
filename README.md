@@ -14,4 +14,7 @@ If you're looking to get started with Regular Expressions - check out [Regular E
 If you just need a cheat sheet - check out [RegexLib](http://regexlib.com/CheatSheet.aspx)
 
 ## Where can I get it?
-Oh, I'm working on this. There's an old NuGet package for it but it's way out of date. I'll give a shout once it's updated.
+You can install it using NuGet with
+````
+Install-Package InlineRegexBuilder
+````
