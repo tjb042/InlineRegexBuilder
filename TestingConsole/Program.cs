@@ -35,7 +35,7 @@ namespace TestingConsole {
             builder.CaptureGroup(c => c
                     .MatchCharacterSet(' ', '-').Optional() // optional seperator
                     .AnyDecimalDigit().Quantifier(4) // the next four digits
-                    ,nonCapturing: true, isOptionalGroup: true); // makes the capture group optional
+                    ,nonCapturing: true).Optional(); // makes the capture group optional
                 
             // end the string
             builder.EndString();
