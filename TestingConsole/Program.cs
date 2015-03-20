@@ -10,11 +10,6 @@ namespace TestingConsole {
     class Program {
 
         static void Main(string[] args) {
-            RegexMap<RegexTypes> regexes = new RegexMap<RegexTypes>();
-            regexes.Add(RegexTypes.Email, CreateEmailRegex());
-            regexes.Add(RegexTypes.Phone, CreatePhoneRegex());
-            regexes.Add(RegexTypes.ZipCode, CreateZipCodeRegex());
-
             Console.WriteLine();
             Console.Write("Complete");
             Console.ReadKey(true);
@@ -75,10 +70,39 @@ namespace TestingConsole {
 
     }
 
-    public enum RegexTypes {
+    public sealed class RegexCache {
+
+        private static RegexCache cache = new RegexCache();
+        private Dictionary<RegexType, Regex> regexes = new Dictionary<RegexType, Regex>();
+
+        private RegexCache() {
+
+        }
+
+        public static RegexCache Current {
+            get {
+                return cache;
+            }
+        }
+
+        public Regex Get(RegexType regexType) {
+            return regexes[regexType];
+        }
+
+        public Regex this[RegexType regexType] {
+            get {
+                return Get(regexType);
+            }
+        }
+
+    }
+
+    public enum RegexType {
         Email,
         Phone,
-        ZipCode
+        ZipCode,
+        IPv4,
+        IPv6
     }
 
 }
