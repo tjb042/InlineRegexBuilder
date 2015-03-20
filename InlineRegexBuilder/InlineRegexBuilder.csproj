@@ -44,11 +44,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAtomicRegexClause.cs" />
     <Compile Include="RegexBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegexBuilder_Operators.cs" />
     <Compile Include="RegexBuilder_Overrides.cs" />
+    <Compile Include="RegexBuilder_Properties.cs" />
     <Compile Include="RegexBuilder_StaticMethods.cs" />
   </ItemGroup>
   <ItemGroup>
