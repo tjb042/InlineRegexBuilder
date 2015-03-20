@@ -14,6 +14,7 @@ namespace IRE {
         /// The <c>StringBuilder</c> that represents the current regular expression.
         /// </summary>
         private StringBuilder regexString = new StringBuilder();
+
         /// <summary>
         /// Specifies whether this regex supports itself and an empty string, or just itself.
         /// </summary>
@@ -373,7 +374,7 @@ namespace IRE {
         /// <param name="clause">The clause to append</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder CaptureGroup(Action<RegexBuilder> clause) {
-            return CaptureGroup(clause, false, false);
+            return CaptureGroup(clause, false);
         }
 
         /// <summary>
@@ -383,17 +384,6 @@ namespace IRE {
         /// <param name="nonCapturing">If <c>True</c>, indicates that the group should not capture its contents; otherwise, <c>False</c></param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder CaptureGroup(Action<RegexBuilder> clause, bool nonCapturing) {
-            return CaptureGroup(clause, nonCapturing, false);
-        }
-
-        /// <summary>
-        /// Appends a capture group that contains <paramref name="clause"/>
-        /// </summary>
-        /// <param name="clause">The clause to append</param>
-        /// <param name="nonCapturing">If <c>True</c>, indicates that the group should not capture its contents; otherwise, <c>False</c></param>
-        /// <param name="isOptionalGroup">If <c>True</c>, group is optional; otherwise, <c>False</c></param>
-        /// <returns>The current <c>RegexBuilder</c> instance</returns>
-        public RegexBuilder CaptureGroup(Action<RegexBuilder> clause, bool nonCapturing, bool isOptionalGroup) {
             if (clause == null) {
                 return this;
             }
@@ -405,10 +395,6 @@ namespace IRE {
 
             clause.Invoke(this);
             regexString.Append(')');
-
-            if (isOptionalGroup) {
-                regexString.Append('?');
-            }
 
             return this;
         }
