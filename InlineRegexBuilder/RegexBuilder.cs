@@ -69,7 +69,7 @@ namespace IRE {
         /// Appends text into the builder
         /// </summary>
         /// <param name="input">The text to append</param>
-        /// <param name="encode"><c>True</c>, to encode <paramref name="input"/>; <c>False</c> to append text as-is</param>
+        /// <param name="encode"><c>True</c>, to Regex encode <paramref name="input"/>; <c>False</c> to append text as-is</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AppendText(string input, bool encode) {
             if (string.IsNullOrEmpty(input)) {
@@ -94,7 +94,7 @@ namespace IRE {
         /// Appends text into the builder
         /// </summary>
         /// <param name="input">The character to append</param>
-        /// <param name="encode"><c>True</c>, to encode <paramref name="input"/>; <c>False</c> to append the character as-is</param>
+        /// <param name="encode"><c>True</c>, to Regex encode <paramref name="input"/>; <c>False</c> to append the character as-is</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder AppendText(char input, bool encode) {
             return AppendText(input.ToString(), encode);
@@ -266,7 +266,7 @@ namespace IRE {
         }
 
         /// <summary>
-        /// Appends an explicit set of characters to match. Encodes <paramref name="characters"/>.
+        /// Appends an explicit set of characters to match. Regex encodes <paramref name="characters"/>.
         /// </summary>
         /// <param name="characters">The character set to append</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
@@ -278,7 +278,7 @@ namespace IRE {
         /// Appends an explicit set of characters to match
         /// </summary>
         /// <param name="characters">The character set to append</param>
-        /// <param name="encode"><c>True</c>, to encode <paramref name="characters"/>; <c>False</c> to append the character set as-is</param>
+        /// <param name="encode"><c>True</c>, to Regex encode <paramref name="characters"/>; <c>False</c> to append the character set as-is</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder MatchCharacterSet(string characters, bool encode) {
             if (string.IsNullOrEmpty(characters)) {
@@ -306,7 +306,7 @@ namespace IRE {
         }
 
         /// <summary>
-        /// Appends an explicit set of characters that should not match. Encodes <paramref name="characters"/>
+        /// Appends an explicit set of characters that should not match. Regex encodes <paramref name="characters"/>
         /// </summary>
         /// <param name="characters">The character set to append</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
@@ -318,7 +318,7 @@ namespace IRE {
         /// Appends an explicit set of characters that should not match
         /// </summary>
         /// <param name="characters">The character set to append</param>
-        /// <param name="encode"><c>True</c>, to encode <paramref name="characters"/>; <c>False</c> to append the character set as-is</param>
+        /// <param name="encode"><c>True</c>, to Regex encode <paramref name="characters"/>; <c>False</c> to append the character set as-is</param>
         /// <returns>The current <c>RegexBuilder</c> instance</returns>
         public RegexBuilder NonMatchCharacterSet(string characters, bool encode) {
             if (string.IsNullOrEmpty(characters)) {
