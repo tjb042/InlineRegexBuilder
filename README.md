@@ -13,8 +13,9 @@ If you're looking to get started with Regular Expressions - check out [Regular E
 
 If you just need a cheat sheet - check out [RegexLib](http://regexlib.com/CheatSheet.aspx)
 
-## Where can I get it?
-You can install it using NuGet with
-````
-Install-Package InlineRegexBuilder
-````
+## NuGet
+You can find InlineRegexBuilder on NuGet at https://www.nuget.org/packages/InlineRegexBuilder/
+
+Or via the NuGet Package Manager Console
+
+`PM> Install-Package InlineRegexBuilder`
